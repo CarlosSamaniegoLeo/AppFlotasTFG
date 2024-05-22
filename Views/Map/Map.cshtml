@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa con OpenLayers y Clustering de Marcadores</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v9.1.0/ol.css">
+    <link rel="stylesheet" href="~/css/Map.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <header>
+        <nav class="navbar bg-body-tertiary fixed-top">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Mapa de Flotas</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Mapa de Flotas</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page" href="/Vehiculos">Vehiculos</a>
+                            </li>
+                            <!-- HTML para el menú desplegable -->
+                            <div class="dropdown">
+                                <button class="btn btn-secondary dropdown-toggle" type="button" id="estadisticasCocheLink" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Estadísticas Coche
+                                </button>
+                                <ul class="dropdown-menu" id="dropdownMenu" aria-labelledby="estadisticasCocheLink">
+                                    <!-- Las matrículas de los coches se agregarán aquí -->
+                                </ul>
+                            </div>
+                            <li class="nav-item">
+                                <a class="nav-link" id="cerrarSesionBtn">Cerrar Sesión</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="map-container">
+        <div id="map"></div>
+        <button type="button" class="btn btn-primary position-absolute bottom-0 end-0 m-3" id="liveToastBtn">Gasolineras cercanas</button>
+    </div>
+    <div class="toast-container"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="trackerModal" tabindex="-1" aria-labelledby="nuevoProyecto" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="nuevoProyecto">Nuevo Vehiculo</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form>
+                            <div class="row mb-3">
+                                <div class="form-group col-md-4">
+                                    <label for="marca" class="form-label">Marca</label>
+                                    <input type="text" class="form-control" id="marca">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="modelo" class="form-label">Modelo</label>
+                                    <input type="text" class="form-control" id="modelo">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="año" class="form-label">Año</label>
+                                    <input type="text" class="form-control" id="año">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="form-group col-md-6">
+                                    <label for="latitud" class="form-label">Latitud</label>
+                                    <input type="text" class="form-control" id="latitud">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="altitud" class="form-label">Altitud</label>
+                                    <input type="text" class="form-control" id="altitud">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="form-group col-md-4">
+                                    <label for="autonomia_total" class="form-label">Autonomia Total</label>
+                                    <input type="text" class="form-control" id="autonomia_total">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="autonomia_restante" class="form-label">Autonomia Restante</label>
+                                    <input type="text" class="form-control" id="autonomia_restante">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="matricula" class="form-label">Matricula</label>
+                                    <input type="text" class="form-control" id="matricula">
+                                </div>
+                            </div>
+                            <input type="hidden" id="idUsuario">
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button id="crearProyectoBtn" type="button" class="btn btn-primary">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Fin del Modal -->
+
+    <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Scripts/Map.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</body>
+</html>

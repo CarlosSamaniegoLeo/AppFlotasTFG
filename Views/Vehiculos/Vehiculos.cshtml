@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.22.5/dist/bootstrap-table.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <style>
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(0deg, rgba(0,0,0,0.5158263989189426) 0%, rgba(255,255,255,1) 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="modal fade" id="trackerModal" tabindex="-1" aria-labelledby="nuevoProyecto" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="nuevoProyecto">Nuevo Vehiculo</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container-fluid">
+                        <form id="vehiculoForm">
+                            <div class="row mb-3">
+                                <div class="form-group col-md-4">
+                                    <label for="marca" class="form-label">Marca</label>
+                                    <select class="form-select" id="marca" required>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="modelo" class="form-label">Modelo</label>
+                                    <select class="form-select" id="modelo" required>
+                                        <option value="">Seleccione una Marca</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="año" class="form-label">Año</label>
+                                    <select class="form-select" id="año" required>
+                                        <option selected>Elige un Año</option>
+                                        <!-- Añade las opciones de años dinámicamente -->
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="form-group col-md-6">
+                                    <label for="latitud" class="form-label">Latitud</label>
+                                    <input type="text" class="form-control" id="latitud">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="longitud" class="form-label">Longitud</label>
+                                    <input type="text" class="form-control" id="longitud">
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="form-group col-md-4">
+                                    <label for="autonomia_total" class="form-label">Autonomia Total</label>
+                                    <input type="text" class="form-control" id="autonomia_total">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="autonomia_restante" class="form-label">Autonomia Restante</label>
+                                    <input type="text" class="form-control" id="autonomia_restante">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="matricula" class="form-label">Matricula</label>
+                                    <input type="text" class="form-control" id="matricula">
+                                </div>
+                            </div>
+                            <input type="hidden" id="idUsuario">
+                        </form>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <input type="hidden" id="idCocheHidden" name="idCoche" value=""> <!-- Aquí -->
+                    <button id="crearProyectoBtn" type="button" class="btn btn-primary">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col mt-3">
+                <div id="toolbar" class="d-flex justify-content-between">
+                    <!-- Cambiado para añadir espacio entre los botones -->
+                    <div>
+                        <button id="create" class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#trackerModal">
+                             Crear
+                        </button>
+                        <button id="edit" class="btn btn-primary" type="button" disabled>Edit</button>
+                        <button id="delete" class="btn btn-primary" type="button" disabled data-bs-toggle="modal" data-bs-target="#removeConfirmation">Eliminar</button>
+                    </div>
+                    <div>
+                        <button id="mapButton" class="btn btn-primary" type="button">
+                            <i class="fas fa-map-marker-alt"></i> 
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col mt-3">
+            <table id="table" data-toggle="table" data-search="true" data-show-columns="true" data-pagination="true" data-page-list="[10, 25, 50, 100]">
+                <thead>
+                    <tr>
+                        <th data-field="radio" data-checkbox="true"></th>
+                        <th data-field="idCoche">ID Coche</th>
+                        <th data-field="Latitud">Latitud</th>
+                        <th data-field="Longitud">Longitud</th>
+                        <th data-field="Marca">Marca</th>
+                        <th data-field="Modelo">Modelo</th>
+                        <th data-field="Año">Año</th>
+                        <th data-field="AutonomiaTotal">Autonomía Total</th>
+                        <th data-field="AutonomiaRestante">Autonomía Restante</th>
+                        <th data-field="idUsuario">ID Usuario</th>
+                        <th data-field="Matricula">Matrícula</th>
+
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var coche in Model)
+                    {
+                        <tr>
+                            <td><input type="radio" name="cocheRadio"></td>
+                            <td>@coche.idCoche</td>
+                            <td>@coche.Latitud</td>
+                            <td>@coche.Longitud</td>
+                            <td>@coche.Marca</td>
+                            <td>@coche.Modelo</td>
+                            <td>@coche.Año</td>
+                            <td>@coche.AutonomiaTotal</td>
+                            <td>@coche.AutonomiaRestante</td>
+                            <td>@coche.idUsuario</td>
+                            <td>@coche.Matricula</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.22.5/dist/bootstrap-table.min.js"></script>
+    <script src="~/Scripts/Vehiculos.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coche del año</title>
+    <style>
+        /* Estilos globales */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif; /* Cambia la fuente según tus preferencias */
+            background-color:rgb(180, 180, 180);
+            background-size: cover;
+            background-position: center;
+            color: white; /* Cambia el color del texto según tus necesidades */
+        }
+
+        .header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px; /* Añade un espacio alrededor del encabezado */
+        }
+
+        .car-image {
+            width: 500px; /* Ajusta según el tamaño deseado */
+            height: 250px; /* Ajusta según el tamaño deseado */
+            background-color: lightgray; /* solo para propósitos de demostración */
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+            .car-image img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+
+        .car-details {
+            text-align: center;
+            font-weight: bold;
+            padding: 20px; /* Añade un espacio alrededor de los detalles del coche */
+        }
+
+        .stats-container {
+            margin-top: 60px;
+            padding: 30px; /* Añade un espacio alrededor de las estadísticas del coche */
+        }
+
+        .stats-header {
+            display: flex;
+            justify-content: space-between;
+            background-color: rgba(128, 128, 128, 0.8); /* Fondo semitransparente más oscuro */
+            padding: 10px 20px; /* Añade un espacio alrededor de los encabezados de las estadísticas */
+        }
+
+        .stat {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            
+            font-size: 16px; /* Tamaño del texto */
+            color: white; /* Color del texto */
+        }
+
+        .stats-data {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px; /* Añade un espacio alrededor de los datos de las estadísticas */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="car-image">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1Vxizw6P0kk9mm1-xdO431oV97nbfuBL9RZV6ILeCUQ&s" alt="Toyota Supra">
+        </div>
+        <div class="car-details">
+            <h2>TOYOTA SUPRA</h2>
+            <p>Modelo: 2022</p>
+            <p>Marca: Toyota</p>
+        </div>
+    </div>
+    <div class="stats-container">
+        <div class="stats-header">
+            <div class="stat">V.Max</div>
+            <div class="stat">Aceleración</div>
+            <div class="stat">Potencia</div>
+            <div class="stat">Autonomía</div>
+        </div>
+        <div class="stats-data">
+            <div class="stat">250 km/h</div>
+            <div class="stat">0-100 km/h en 4.3 s</div>
+            <div class="stat">350 HP</div>
+            <div class="stat autonomy">
+                <span class="autonomy-text">175/350</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

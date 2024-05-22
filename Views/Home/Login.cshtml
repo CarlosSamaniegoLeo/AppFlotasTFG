@@ -1,0 +1,40 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="~/css/Login.css">
+    <style>
+       
+
+       
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Iniciar Sesión</h2>
+        <div class="input-group">
+            <input type="text" placeholder="Correo electrónico" id="email" onblur="validateEmail()">
+        </div>
+        <div class="input-group">
+            <input type="password" placeholder="Contraseña" id="password">
+        </div>
+        <button class="btn-google" onclick="signInWithGoogle()">Iniciar Sesión con Google</button>
+        <div class="btn-group">
+            <button class="btn-primary" id="btn-iniciar-sesion" onclick="signInWithEmail()">Iniciar Sesión</button>
+            <button id="btn-registrarse" onclick="crearUsuario()">Registrarse</button>
+        </div>
+    </div>
+
+    <!-- Modal para verificación de correo -->
+    <div id="verification-modal">
+        <div id="verification-modal-content">
+            <h2>Verificación de Correo</h2>
+            <p>Se ha enviado un correo de verificación a tu dirección de correo electrónico. Por favor, verifica tu correo para continuar.</p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.6/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.6/firebase-auth-compat.js"></script>
+    <script src="~/Scripts/Login.js"></script>
+</body>
+</html>
