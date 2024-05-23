@@ -53,7 +53,6 @@ namespace AppFlotasTFG.Service
                 }
                 catch (Exception ex)
                 {
-                    // Manejar la excepción
                     return false;
                 }
             }
@@ -65,23 +64,24 @@ namespace AppFlotasTFG.Service
             {
                 try
                 {
-                    // No necesitas recuperar el coche completo para eliminarlo, solo el ID es suficiente
                     return _repository.Delete(context, new Coches { idCoche = id });
                 }
                 catch (Exception ex)
                 {
-                    // Manejar la excepción
                     return false;
                 }
             }
         }
 
-        public IEnumerable<Coches> GetCochesByUserId(int idUsuario)
+        public IEnumerable<Coches> GetCochesByUserId(string idUsuario)
         {
             using (var context = _factoryRepositoryContextTFGflotas.Create())
             {
-                return _repository.SelectAllByUserId(context, idUsuario);
+                var coches = _repository.SelectAllByUserId(context, idUsuario);
+                return coches ?? Enumerable.Empty<Coches>(); // Devolver una lista vacía si no hay vehículos asociados
             }
         }
+
+
     }
 }

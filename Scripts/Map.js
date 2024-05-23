@@ -1,5 +1,22 @@
-﻿// Definir el radio de acción de los coches (en metros)
+﻿import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js';
+import { getAuth, signOut } from 'https://www.gstatic.com/firebasejs/9.6.6/firebase-auth.js';
+const firebaseConfig = {
+    apiKey: "AIzaSyDbr4HoEt4xNlMAeb3ITBCLcG10dW3e4Jg",
+    authDomain: "proyectotfg-36244.firebaseapp.com",
+    projectId: "proyectotfg-36244",
+    storageBucket: "proyectotfg-36244.appspot.com",
+    messagingSenderId: "769270297853",
+    appId: "1:769270297853:web:eaa979fa67be27be5cfa94",
+    measurementId: "G-431XXE4MES"
+};
+
+// Inicializar Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app)
+// Definir el radio de acción de los coches(en metros)
 const carRadius = 3000;
+const uid = sessionStorage.getItem('uid');
+console.log(typeof (uid));
 
 window.onload = function () {
     const map = new ol.Map({
@@ -15,11 +32,15 @@ window.onload = function () {
         })
     });
 
+    
     function cerrarSesion() {
-        // Aquí puedes agregar más lógica antes de redirigir
-        window.location.href = "/";
+        signOut(auth).then(() => {
+            sessionStorage.removeItem('uid'); // Limpiar el uid de sessionStorage
+            window.location.href = "/";
+        }).catch((error) => {
+            console.error('Error al cerrar sesión:', error);
+        });
     }
-
     document.getElementById('cerrarSesionBtn').addEventListener('click', cerrarSesion);
 
     function calcularDistanciaEnMetros(coord1, coord2) {
@@ -39,8 +60,7 @@ window.onload = function () {
     }
 
     function cargarMarcadores() {
-        const idUsuario = 1;
-        $.getJSON(`/Vehiculos/GetCochesPorUsuario?idUsuario=${idUsuario}`, function (coches) {
+        $.getJSON(`/Vehiculos/GetCochesPorUsuario?idUsuario=${uid}`, function (coches) {
             const carCoordinates = coches.map(coche => {
                 return {
                     lat: parseFloat(coche.Latitud),
@@ -137,8 +157,7 @@ window.onload = function () {
     }
 
     function agregarCoches() {
-        const idUsuario = 1;
-        $.getJSON(`/Vehiculos/GetCochesPorUsuario?idUsuario=${idUsuario}`, function (data) {
+        $.getJSON(`/Vehiculos/GetCochesPorUsuario?idUsuario=${uid}`, function (data) {
             const coches = data;
             const features = [];
 
@@ -221,15 +240,20 @@ window.onload = function () {
                     </tr>
                 </thead>
                 <tbody id="tablaGasolineras">
-                    ${gasolineras.map((gasolinera, index) => `
+                    ${gasolineras.map((gasolinera, index) => {
+                        const precioGasolina95 = gasolinera['Precio Gasolina 95 E5'] || 'No disponible';
+                        const precioGasoleoA = gasolinera['Precio Gasoleo A'] || 'No disponible';
+
+                        return `
                         <tr>
                             <td>${gasolinera.Localidad}</td>
                             <td>${gasolinera['Dirección']}</td>
-                            <td>${gasolinera['Precio Gasolina 95']}</td>
-                            <td>${gasolinera['Precio Gasóleo A']}</td>
+                            <td>${precioGasolina95}</td>
+                            <td>${precioGasoleoA}</td>
                             <td><button type="button" class="btn btn-primary btn-sm" onclick="calcularYMostrarRuta(${index})">Ruta</button></td>
                         </tr>
-                    `).join('')}
+                    `;
+                    }).join('')}
                 </tbody>
             </table>
         </div>
@@ -273,31 +297,35 @@ window.onload = function () {
         tablaGasolineras.innerHTML = '';
 
         if (selectedCar === undefined) {
-            // Si el vehículo seleccionado es undefined, cargar todas las gasolineras
             gasolineras.forEach((gasolinera, index) => {
+                const precioGasolina95 = gasolinera['Precio Gasolina 95 E5'] || 'No disponible';
+                const precioGasoleoA = gasolinera['Precio Gasoleo A'] || 'No disponible';
+
                 tablaGasolineras.innerHTML += `
                 <tr>
                     <td>${gasolinera.Localidad}</td>
                     <td>${gasolinera['Dirección']}</td>
-                    <td>${gasolinera['Precio Gasolina 95']}</td>
-                    <td>${gasolinera['Precio Gasóleo A']}</td>
+                    <td>${precioGasolina95}</td>
+                    <td>${precioGasoleoA}</td>
                     <td><button type="button" class="btn btn-primary btn-sm" onclick="calcularYMostrarRuta(${index})">Ruta</button></td>
                 </tr>
             `;
             });
         } else {
-            // Si se selecciona un vehículo, cargar las gasolineras cercanas a ese vehículo
             gasolineras.forEach((gasolinera, index) => {
                 const gasStationCoords = { lat: parseFloat(gasolinera.Latitud.replace(',', '.')), lng: parseFloat(gasolinera['Longitud (WGS84)'].replace(/\s/g, '').replace(',', '.')) };
                 const distanceToCar = calcularDistanciaEnMetros(selectedCar, gasStationCoords);
 
                 if (distanceToCar <= carRadius) {
+                    const precioGasolina95 = gasolinera['Precio Gasolina 95 E5'] || 'No disponible';
+                    const precioGasoleoA = gasolinera['Precio Gasoleo A'] || 'No disponible';
+
                     tablaGasolineras.innerHTML += `
                     <tr>
                         <td>${gasolinera.Localidad}</td>
                         <td>${gasolinera['Dirección']}</td>
-                        <td>${gasolinera['Precio Gasolina 95']}</td>
-                        <td>${gasolinera['Precio Gasóleo A']}</td>
+                        <td>${precioGasolina95}</td>
+                        <td>${precioGasoleoA}</td>
                         <td><button type="button" class="btn btn-primary btn-sm" onclick="calcularYMostrarRuta(${index})">Ruta</button></td>
                     </tr>
                 `;
@@ -356,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function () {
         console.log("Haciendo clic en el enlace 'Estadísticas Coche'...");
 
         // Realizar una solicitud AJAX para obtener las matrículas de los coches del usuario
-        $.getJSON(`/Vehiculos/GetCochesPorUsuario?idUsuario=${idUsuario}`, function (data) {
+        $.getJSON(`/Vehiculos/GetCochesPorUsuario?idUsuario=${uid}`, function (data) {
             console.log("Datos recibidos:", data);
 
             // Limpiar el menú desplegable

@@ -21,7 +21,7 @@ namespace AppFlotasTFG.Controllers
 
         public ActionResult Index()
         {
-            var coches = _cochesService.GetAllCoches().Where(coche => coche.idUsuario == 1);
+            var coches = _cochesService.GetAllCoches();
             return View("Vehiculos", coches);
         }
 
@@ -46,7 +46,7 @@ namespace AppFlotasTFG.Controllers
             var coches = _cochesService.GetAllCoches();
             return Json(coches, JsonRequestBehavior.AllowGet);
         }
-        public JsonResult GetCochesPorUsuario(int idUsuario)
+        public JsonResult GetCochesPorUsuario(string idUsuario)
         {
             var coches = _cochesService.GetCochesByUserId(idUsuario);
             return Json(coches, JsonRequestBehavior.AllowGet);
@@ -85,8 +85,6 @@ namespace AppFlotasTFG.Controllers
         [HttpPost]
         public JsonResult CrearCoche(Coches nuevoCoche)
         {
-            // Asignar el ID de usuario
-            nuevoCoche.idUsuario = 1; // O el valor que desees
 
             // Intentar guardar el nuevo coche usando el servicio
             if (_cochesService.SaveCoche(nuevoCoche))

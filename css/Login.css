@@ -65,9 +65,6 @@
     background-color: #DB4437;
     color: white;
 }
-#btn-registrarse {
-    display: none; /* Oculta el botón de Registrarse inicialmente */
-}
 
 /* Estilo para el modal */
 #verification-modal {

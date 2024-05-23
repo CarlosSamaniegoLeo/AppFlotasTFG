@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Iniciar Sesión</title>
-    <link rel="stylesheet" href="~/css/Login.css" type="text/css">
+    <link rel="stylesheet" href="~/css/Login.css">
     <style>
     </style>
 </head>
@@ -16,11 +16,8 @@
         <div class="input-group">
             <input type="password" placeholder="Contraseña" id="password">
         </div>
-        <button id="google-sign-in" class="btn btn-primary">Iniciar sesión con Google</button>
-
         <div class="btn-group">
-            <button type="submit" class="btn-primary" id="login" onclick="iniciarSesion()">Iniciar Sesión</button>
-            <button id="registro" class="btn-primary" onclick="window.location.href='/Register';">Registrarse</button>
+            <button id="registro">Registrarse</button>
         </div>
     </div>
 
@@ -30,6 +27,7 @@
             <p>Se ha enviado un correo de verificación a tu dirección de correo electrónico. Por favor, verifica tu correo para continuar.</p>
         </div>
     </div>
-    <script type="module" src="~/Scripts/Login.js"></script>
+
+    <script type="module" src="~/Scripts/registro.js"></script>
 </body>
 </html>

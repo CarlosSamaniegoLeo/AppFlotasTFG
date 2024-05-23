@@ -15,7 +15,7 @@ namespace AppFlotasTFG.Models
         public int Año { get; set; }
         public int AutonomiaTotal { get; set; }
         public int AutonomiaRestante { get; set; }
-        public int idUsuario { get; set; }
+        public string idUsuario { get; set; }
         public string Matricula { get; set; }
     }
 }

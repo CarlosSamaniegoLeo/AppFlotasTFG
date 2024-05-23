@@ -20,7 +20,6 @@ namespace AppFlotasTFG.Repository
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
                 return null;
             }
         }
@@ -38,7 +37,6 @@ namespace AppFlotasTFG.Repository
             }
             catch (Exception ex)
             {
-                // Manejo de excepciones
                 return null;
             }
         }

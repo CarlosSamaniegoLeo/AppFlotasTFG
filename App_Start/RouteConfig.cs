@@ -40,6 +40,11 @@ namespace AppFlotasTFG
                 url: "Vehiculos",
                 defaults: new { controller = "Vehiculos", action = "ModelosPorMarca" }
             );
+            routes.MapRoute(
+                name: "Register",
+                url: "Register",
+                defaults: new { controller = "Register", action = "Index" }
+            );
         }
 
 

@@ -79,7 +79,7 @@ namespace AppFlotasTFG.Repository
                     [Marca] = @Marca,
                     [Modelo] = @Modelo,
                     [Año] = @Año,
-                    [autonomiaTotal] = @autonomiaTotal,
+                    [AutonomiaTotal] = @AutonomiaTotal,
                     [AutonomiaRestante] = @AutonomiaRestante,
                     [idUsuario] = @idUsuario,
                     [matricula] = @matricula
@@ -105,7 +105,7 @@ namespace AppFlotasTFG.Repository
                     [Marca],
                     [Modelo],
                     [Año],
-                    [autonomiaTotal],
+                    [AutonomiaTotal],
                     [AutonomiaRestante],
                     [idUsuario],
                     [matricula]
@@ -130,7 +130,7 @@ namespace AppFlotasTFG.Repository
                     [Marca],
                     [Modelo],
                     [Año],
-                    [autonomiaTotal],
+                    [AutonomiaTotal],
                     [AutonomiaRestante],
                     [idUsuario],
                     [matricula]
@@ -146,7 +146,7 @@ namespace AppFlotasTFG.Repository
                 return null;
             }
         }
-        public IEnumerable<Coches> SelectAllByUserId(SupportRepositoryContext context, int id)
+        public IEnumerable<Coches> SelectAllByUserId(SupportRepositoryContext context, string id)
         {
             const string query = @"
         SELECT [idCoche],
@@ -155,7 +155,7 @@ namespace AppFlotasTFG.Repository
             [Marca],
             [Modelo],
             [Año],
-            [autonomiaTotal],
+            [AutonomiaTotal],
             [AutonomiaRestante],
             [idUsuario],
             [matricula]

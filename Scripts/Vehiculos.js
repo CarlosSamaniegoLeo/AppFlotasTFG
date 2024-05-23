@@ -1,4 +1,5 @@
-﻿$(document).ready(function () {
+﻿const uid = sessionStorage.getItem('uid');
+$(document).ready(function () {
     var $table = $('#table');
 
     // Función para agregar las opciones de años dinámicamente
@@ -11,6 +12,39 @@
             }));
         }
     }
+    // Función para cargar los vehículos del usuario actual
+    function loadUserVehicles() {
+        $.ajax({
+            url: '/Vehiculos/GetCochesPorUsuario',
+            method: 'GET',
+            data: { idUsuario: uid },
+            dataType: 'json',
+            success: function (data) {
+                if (data.length > 0) {
+                    // Filtrar los vehículos asociados al usuario actual (filtrar por idUsuario)
+                    var userVehicles = data.filter(function (vehicle) {
+                        return vehicle.idUsuario === uid;
+                    });
+                    // Si hay vehículos asociados al usuario, cargar los datos en la tabla
+                    $table.bootstrapTable('destroy').bootstrapTable({
+                        data: userVehicles
+                    });
+                } else {
+                    
+                    // Si hay vehículos asociados al usuario, cargar los datos en la tabla
+                    $table.bootstrapTable('destroy').bootstrapTable({
+                        data: []
+                    });
+                    // Si el usuario no tiene vehículos asociados, mostrar un mensaje o realizar otra acción
+                    alert('El usuario no tiene vehículos asociados.');
+                }
+            },
+            error: function () {
+                alert('Error al cargar los vehículos del usuario.');
+            }
+        });
+    }
+
 
     // Cargar opciones de marcas desde la base de datos
     function loadMarcas() {
@@ -120,6 +154,7 @@
 
             // Cargar los valores del vehículo seleccionado en el formulario de edición
             $('#idCocheHidden').val(selectedRow.idCoche); // Establecer el valor del campo oculto
+            $('#idUsuarioHidden').val(selectedRow.idUsuario); // Establecer el valor del campo oculto
 
             $('#marca').val(selectedRow.Marca);
             $('#año').val(selectedRow.Año);
@@ -128,7 +163,6 @@
             $('#autonomia_total').val(selectedRow.AutonomiaTotal);
             $('#autonomia_restante').val(selectedRow.AutonomiaRestante);
             $('#matricula').val(selectedRow.Matricula);
-            $('#idUsuario').val(selectedRow.idUsuario);
 
             // Cargar los modelos basados en la marca seleccionada
             loadModelos(selectedRow.Marca);
@@ -175,19 +209,83 @@
     });
 
     $('#crearProyectoBtn').click(function () {
+        // Limpiar mensajes de error anteriores
+        $('.error-message').text('');
+
+        // Obtener los valores de los campos
+        var marca = $('#marca').val();
+        var modelo = $('#modelo').val();
+        var año = $('#año').val();
+        var latitud = $('#latitud').val();
+        var longitud = $('#longitud').val();
+        var autonomiaTotal = $('#autonomia_total').val();
+        var autonomiaRestante = $('#autonomia_restante').val();
+        var matricula = $('#matricula').val();
+
+        // Bandera para validar si el formulario es válido
+        var isValid = true;
+
+        // Validar cada campo
+        if (!marca) {
+            $('#error-marca').text('Por favor, rellene este campo.');
+            isValid = false;
+        }
+
+        if (!modelo) {
+            $('#error-modelo').text('Por favor, rellene este campo.');
+            isValid = false;
+        }
+
+        if (!año) {
+            $('#error-año').text('Por favor, rellene este campo.');
+            isValid = false;
+        }
+
+        if (!latitud) {
+            $('#error-latitud').text('Por favor, rellene este campo.');
+            isValid = false;
+        }
+
+        if (!longitud) {
+            $('#error-longitud').text('Por favor, rellene este campo.');
+            isValid = false;
+        }
+
+        if (!autonomiaTotal) {
+            $('#error-autonomia_total').text('Por favor, rellene este campo.');
+            isValid = false;
+        }
+
+        if (!autonomiaRestante) {
+            $('#error-autonomia_restante').text('Por favor, rellene este campo.');
+            isValid = false;
+        }
+
+        if (!matricula) {
+            $('#error-matricula').text('Por favor, rellene este campo.');
+            isValid = false;
+        }
+
+        // Si el formulario no es válido, detener la ejecución
+        if (!isValid) {
+            return;
+        }
+
+        // Crear el objeto nuevoCoche si todos los campos están completos
         var nuevoCoche = {
             idCoche: $('#idCocheHidden').val(), // Obtener el valor del campo oculto
-            marca: $('#marca').val(),
-            modelo: $('#modelo').val(),
-            año: parseInt($('#año').val()), // Convertir a entero
-            latitud: $('#latitud').val(), // Si es necesario, convertir a flotante
-            longitud: $('#longitud').val(), // Si es necesario, convertir a flotante
-            autonomia_total: $('#autonomia_total').val(), // Convertir a entero
-            autonomia_restante: $('#autonomia_restante').val(), // Convertir a entero
-            matricula: $('#matricula').val(),
-            idUsuario: 1 // O el valor que desees
+            marca: marca,
+            modelo: modelo,
+            año: parseInt(año), // Convertir a entero
+            latitud: latitud, // Si es necesario, convertir a flotante
+            longitud: longitud, // Si es necesario, convertir a flotante
+            autonomiaTotal: parseInt(autonomiaTotal),
+            autonomiaRestante: parseInt(autonomiaRestante),
+            matricula: matricula,
+            idUsuario: uid // O el valor que desees
         };
 
+        // Enviar el objeto nuevoCoche al servidor
         $.ajax({
             url: '/Vehiculos/CrearCoche',
             method: 'POST',
@@ -207,7 +305,7 @@
             }
         });
     });
-
+    loadUserVehicles();
     // Llama a la función loadYears() para agregar las opciones de años al select
     loadYears();
 
